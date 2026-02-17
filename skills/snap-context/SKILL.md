@@ -9,21 +9,30 @@ allowed-tools: Task
 
 # Screenshot to Structured Markdown
 
-When this skill is invoked, you MUST delegate the image analysis to a subagent using the Task tool. Do NOT read or process the image in the current context — this keeps image tokens out of the main conversation.
+When this skill is invoked, you MUST delegate image analysis to subagents using the Task tool. Do NOT read or process any images in the current context — this keeps image tokens out of the main conversation.
 
 ## How to invoke
 
+### Single image
 Use the Task tool with these parameters:
 - `subagent_type`: `"general-purpose"`
 - `model`: `"sonnet"`
 - `description`: `"Extract screenshot to markdown"`
-- `prompt`: The full prompt below, with `IMAGE_PATH` replaced by the actual file path from `$ARGUMENTS`
+- `prompt`: The full agent prompt below, with `IMAGE_PATH` replaced by the actual file path
 
-If `$ARGUMENTS` is empty, ask the user for the image file path before spawning the agent.
+### Multiple images
+Spawn **one Task per image in parallel** (all in a single message with multiple tool calls). Each subagent processes one image independently. Replace `IMAGE_PATH` in each prompt with the corresponding file path.
+
+### Identifying images
+Collect all image file paths from:
+1. Explicit paths in `$ARGUMENTS`
+2. Images attached/pasted in the user's message (these appear as `[Image: source: /path/to/file]`)
+
+If no images are found, ask the user for the image file path(s) before spawning any agents.
 
 ## Agent prompt
 
-Pass this exact prompt to the Task agent (replacing `IMAGE_PATH` with the real path):
+Pass this exact prompt to each Task agent (replacing `IMAGE_PATH` with the real path for that image):
 
 ---
 
@@ -101,6 +110,20 @@ Before formatting the main content, check for:
 
 ---
 
-## After the agent returns
+## After the agent(s) return
 
+### Single image
 Return the agent's markdown output directly to the user. Do not add any wrapper text, explanation, or commentary — just the raw markdown result.
+
+### Multiple images
+Return each agent's markdown output separated by a horizontal rule (`---`) and prefixed with the filename in bold for clarity. Example:
+
+**screenshot-1.png**
+
+(markdown output)
+
+---
+
+**screenshot-2.png**
+
+(markdown output)

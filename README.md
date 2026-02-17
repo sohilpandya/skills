@@ -53,11 +53,17 @@ Invoke the skill directly with a file path:
 /snap-context /path/to/screenshot.png
 ```
 
-Or share a screenshot in conversation and ask for it to be extracted:
+Multiple images are supported — attach several screenshots and they'll be processed in parallel, each by its own subagent:
+
+```
+/snap-context /path/to/screenshot-1.png /path/to/screenshot-2.png
+```
+
+Or share screenshots in conversation and ask for them to be extracted:
 
 - "Extract this screenshot as markdown"
-- "Convert this to text"
-- "What's in this screenshot? Give me the data as a table"
+- "Convert these screenshots to text"
+- "What's in these screenshots? Give me the data as tables"
 
 ### Example Output
 
@@ -98,10 +104,11 @@ Given a screenshot of a confirmation dialog:
 
 ## How It Works
 
-1. You share a screenshot (via file path or paste) and invoke the skill
-2. The skill delegates the image to a **separate subagent** — the image is never loaded into your main conversation
-3. The subagent reads the image using multimodal vision (no OCR or external dependencies), detects the content structure, and formats it as markdown
-4. Only the resulting markdown text is returned to your conversation — typically ~100 tokens instead of the thousands an image would cost
+1. You share one or more screenshots (via file path or paste) and invoke the skill
+2. The skill spawns a **separate subagent per image** — images are never loaded into your main conversation
+3. Multiple images are processed **in parallel**, each by its own subagent
+4. Each subagent reads its image using multimodal vision (no OCR or external dependencies), detects the content structure, and formats it as markdown
+5. Only the resulting markdown text is returned to your conversation — typically ~100 tokens per image instead of the thousands each image would cost
 
 This architecture means you can extract screenshots repeatedly throughout a long coding session without degrading your context window.
 
