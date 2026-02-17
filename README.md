@@ -1,12 +1,12 @@
 # snap-context
 
-Screenshot to structured markdown — for AI coding agents.
+A skill that converts screenshots into clean, structured markdown — without consuming your main conversation's context window.
 
-Share a screenshot of a table, form, code, dialog, or dashboard and get back clean, formatted markdown. Ready to paste into docs, issues, or conversations.
+Screenshots of tables, forms, code, dialogs, dashboards, and more are processed by a separate subagent. The image tokens stay in the subagent's context and are discarded after processing — only the lightweight markdown result is returned to your conversation. This means you can extract screenshot content mid-session without burning through your context window.
 
 ## What Are Skills?
 
-Skills are markdown files that give AI agents specialized knowledge and workflows for specific tasks. When installed, they let your agent recognize when you're sharing a screenshot and automatically apply the right formatting rules to extract its content as text.
+Skills are reusable markdown files that extend AI coding agents with specialized capabilities. Once installed, this skill gives your agent the ability to recognise screenshots, analyse their content using a dedicated subagent, and return structured markdown — all triggered by a simple command or natural language request.
 
 Learn more about skills at [github.com/vercel-labs/skills](https://github.com/vercel-labs/skills).
 
@@ -98,9 +98,12 @@ Given a screenshot of a confirmation dialog:
 
 ## How It Works
 
-When invoked, the skill spawns a **subagent** to process the image. The image tokens and analysis stay in the subagent's context — only the clean markdown result comes back to your main conversation. This keeps your context window small, even if you're deep into a long session.
+1. You share a screenshot (via file path or paste) and invoke the skill
+2. The skill delegates the image to a **separate subagent** — the image is never loaded into your main conversation
+3. The subagent reads the image using multimodal vision (no OCR or external dependencies), detects the content structure, and formats it as markdown
+4. Only the resulting markdown text is returned to your conversation — typically ~100 tokens instead of the thousands an image would cost
 
-Claude's multimodal vision reads the screenshot directly — no OCR, no heuristics, no dependencies. The skill prompt teaches the subagent the exact formatting rules for each structure type, so output is consistent and predictable across runs.
+This architecture means you can extract screenshots repeatedly throughout a long coding session without degrading your context window.
 
 ## Supported Agents
 
