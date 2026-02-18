@@ -10,7 +10,7 @@ Learn more about the skills ecosystem at [github.com/vercel-labs/skills](https:/
 |-------|-------------|
 | [snap-context](skills/snap-context/) | Converts screenshots into clean, structured markdown without consuming your main context window |
 
-![snap-context demo](assets/SnapContextDemo.gif)
+![snap-context demo](assets/SnapContextDemo.gif?v=2)
 
 ## Installation
 
