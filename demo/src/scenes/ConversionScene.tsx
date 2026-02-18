@@ -7,7 +7,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { MockScreenshot } from "../components/MockScreenshot";
-import { MarkdownOutput } from "../components/MarkdownOutput";
+import { ClaudeCodeTerminal } from "../components/ClaudeCodeTerminal";
 
 export const ConversionScene: React.FC = () => {
   const frame = useCurrentFrame();
@@ -76,7 +76,7 @@ export const ConversionScene: React.FC = () => {
           transform: `translateX(${markdownSlide}px)`,
         }}
       >
-        <MarkdownOutput />
+        <ClaudeCodeTerminal />
       </div>
     </AbsoluteFill>
   );

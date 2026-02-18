@@ -27,7 +27,7 @@ export const SnapContextDemo: React.FC = () => {
         timing={linearTiming({ durationInFrames: 10 })}
       />
 
-      <TransitionSeries.Sequence durationInFrames={85}>
+      <TransitionSeries.Sequence durationInFrames={100}>
         <ConversionScene />
       </TransitionSeries.Sequence>
 
